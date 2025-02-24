@@ -1,6 +1,6 @@
 CREATE TABLE Team (
     team_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    team_name VARCHAR(100) NOT NULL,
     country VARCHAR(50) NOT NULL,
     num_constructor_championships INT DEFAULT 0,
     num_driver_championships INT DEFAULT 0,
@@ -10,7 +10,7 @@ CREATE TABLE Team (
 
 CREATE TABLE Driver (
     driver_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    team_name VARCHAR(100) NOT NULL,
     date_of_birth DATE NOT NULL,
     num_wins INT DEFAULT 0,
     num_poles INT DEFAULT 0,
@@ -23,7 +23,7 @@ CREATE TABLE Driver (
 
 CREATE TABLE Principal (
     principal_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    principal_name VARCHAR(100) NOT NULL,
     date_of_birth DATE NOT NULL,
     nationality VARCHAR(50) NOT NULL,
     team_id INT REFERENCES Team(team_id),
@@ -45,7 +45,7 @@ CREATE TABLE Race (
 
 CREATE TABLE Car (
     car_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    car_name VARCHAR(100) NOT NULL,
     season INT NOT NULL,
     team_id INT REFERENCES Team(team_id),
     engine_supplier VARCHAR(100) NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE Penalty (
 -- Sponsor (Superclass)
 CREATE TABLE Sponsor (
     sponsor_id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
+    sponsor_name VARCHAR(100) NOT NULL,
     industry VARCHAR(100) NOT NULL
 );
 
