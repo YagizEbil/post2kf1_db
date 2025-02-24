@@ -59,20 +59,8 @@ CREATE TABLE Penalty (
     penalty_id SERIAL PRIMARY KEY,
     race_id INT REFERENCES Race(race_id),
     penalty_type VARCHAR(100) NOT NULL
-);
-
--- Driver Penalty (ISA)
-CREATE TABLE Driver_Penalty (
-    penalty_id INT PRIMARY KEY REFERENCES Penalty(penalty_id) ON DELETE CASCADE,
-    driver_id INT REFERENCES Driver(driver_id),
-    reason TEXT
-);
-
--- Team Penalty (ISA)
-CREATE TABLE Team_Penalty (
-    penalty_id INT PRIMARY KEY REFERENCES Penalty(penalty_id) ON DELETE CASCADE,
-    team_id INT REFERENCES Team(team_id),
-    reason TEXT
+    driver_id INT REFERENCES Driver(driver_id)
+    team_id INT REFERENCES Team(team_id)
 );
 
 -- Sponsor (Superclass)
