@@ -18,7 +18,7 @@ CREATE TABLE Driver (
     nationality VARCHAR(50) NOT NULL,
     num_championships INT DEFAULT 0,
     current_team_id INT REFERENCES Team(team_id),
-    driver_number INT UNIQUE
+    driver_number INT NOT NULL
 );
 
 CREATE TABLE Principal (
