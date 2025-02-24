@@ -54,13 +54,13 @@ CREATE TABLE Car (
     podiums INT DEFAULT 0
 );
 
--- Penalty (Superclass)
+-- Penalty (Weak Entity)
 CREATE TABLE Penalty (
     penalty_id SERIAL PRIMARY KEY,
     race_id INT REFERENCES Race(race_id),
-    penalty_type VARCHAR(100) NOT NULL
-    driver_id INT REFERENCES Driver(driver_id) DELETE ON CASCADE
-    team_id INT REFERENCES Team(team_id) DELETE ON CASCADE
+    penalty_type VARCHAR(100) NOT NULL,
+    driver_id INT REFERENCES Driver(driver_id) ON DELETE CASCADE,
+    team_id INT REFERENCES Team(team_id) ON DELETE CASCADE
 );
 
 -- Sponsor (Superclass)
