@@ -88,6 +88,15 @@ CREATE TABLE Team_Sponsor (
     contract_start DATE
 );
 
+-- Relationship: Drives For
+CREATE TABLE Drives_For (
+    driver_id INT REFERENCES Driver(driver_id) ON DELETE CASCADE,
+    team_id INT REFERENCES Team(team_id) ON DELETE CASCADE,
+    start_year INT NOT NULL,
+    end_year INT,
+    PRIMARY KEY (driver_id, team_id)
+);
+
 -- Relationship: Race Participation (to track drivers in each race)
 CREATE TABLE Race_Participation (
     race_id INT REFERENCES Race(race_id) ON DELETE CASCADE,
