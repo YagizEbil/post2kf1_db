@@ -59,8 +59,8 @@ CREATE TABLE Penalty (
     penalty_id SERIAL PRIMARY KEY,
     race_id INT REFERENCES Race(race_id),
     penalty_type VARCHAR(100) NOT NULL
-    driver_id INT REFERENCES Driver(driver_id)
-    team_id INT REFERENCES Team(team_id)
+    driver_id INT REFERENCES Driver(driver_id) DELETE ON CASCADE
+    team_id INT REFERENCES Team(team_id) DELETE ON CASCADE
 );
 
 -- Sponsor (Superclass)
