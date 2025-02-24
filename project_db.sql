@@ -35,7 +35,7 @@ CREATE TABLE Race (
     grand_prix_name VARCHAR(100) NOT NULL,
     num_laps INT NOT NULL,
     circuit_name VARCHAR(100) NOT NULL,
-    date DATE NOT NULL,
+    race_date DATE NOT NULL,
     winner_driver_id INT REFERENCES Driver(driver_id),
     winning_team_id INT REFERENCES Team(team_id),
     country VARCHAR(50) NOT NULL,
