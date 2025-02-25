@@ -30,17 +30,12 @@ CREATE TABLE Principal (
     start_year INT NOT NULL
 );
 
-CREATE TABLE Race (
+CREATE TABLE Circuit (
     race_id SERIAL PRIMARY KEY,
     grand_prix_name VARCHAR(100) NOT NULL,
     num_laps INT NOT NULL,
     circuit_name VARCHAR(100) NOT NULL,
-    race_date DATE NOT NULL,
-    winner_driver_id INT REFERENCES Driver(driver_id),
-    winning_team_id INT REFERENCES Team(team_id),
     country VARCHAR(50) NOT NULL,
-    pole_position_driver_id INT REFERENCES Driver(driver_id),
-    fastest_lap_driver_id INT REFERENCES Driver(driver_id)
 );
 
 CREATE TABLE Car (
@@ -105,7 +100,12 @@ CREATE TABLE Race_Participation (
     car_id INT REFERENCES Car(car_id),
     grid_position INT,
     finishing_position INT,
-    PRIMARY KEY (race_id, driver_id)
+    PRIMARY KEY (race_id, driver_id),
+    race_date DATE NOT NULL,
+    pole_position_driver_id INT REFERENCES Driver(driver_id),
+    fastest_lap_driver_id INT REFERENCES Driver(driver_id),
+    winner_driver_id INT REFERENCES Driver(driver_id),
+    winning_team_id INT REFERENCES Team(team_id)
 );
 
 
