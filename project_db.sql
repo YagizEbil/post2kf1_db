@@ -70,8 +70,7 @@ CREATE TABLE Driver_Sponsor (
     sponsor_id INT REFERENCES Sponsor(sponsor_id) ON DELETE CASCADE,
     driver_id INT REFERENCES Driver(driver_id),
     PRIMARY KEY (sponsor_id, driver_id),
-    contract_value DECIMAL(10,2),
-    contract_start DATE
+    contract_value DECIMAL(10,2)
 );
 
 -- Team Sponsor (ISA)
@@ -79,8 +78,7 @@ CREATE TABLE Team_Sponsor (
     sponsor_id INT REFERENCES Sponsor(sponsor_id) ON DELETE CASCADE,
     team_id INT REFERENCES Team(team_id),
     PRIMARY KEY (sponsor_id, team_id),
-    contract_value DECIMAL(10,2),
-    contract_start DATE
+    contract_value DECIMAL(10,2)
 );
 
 -- Relationship: Drives For
