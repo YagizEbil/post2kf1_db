@@ -6,6 +6,17 @@ CREATE TABLE Team (
     num_driver_championships INT DEFAULT 0,
     total_race_wins INT DEFAULT 0,
     total_podiums INT DEFAULT 0
+    -- Managed by principal
+    principal_id INT REFERENCES Principal(principal_id)
+);
+
+CREATE TABLE Principal (
+    principal_id SERIAL PRIMARY KEY,
+    principal_name VARCHAR(100) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    nationality VARCHAR(50) NOT NULL,
+    team_id INT REFERENCES Team(team_id),
+    managed_since date NOT NULL
 );
 
 CREATE TABLE Driver (
@@ -21,17 +32,17 @@ CREATE TABLE Driver (
     driver_number INT NOT NULL
 );
 
-CREATE TABLE Principal (
-    principal_id SERIAL PRIMARY KEY,
-    principal_name VARCHAR(100) NOT NULL,
-    date_of_birth DATE NOT NULL,
-    nationality VARCHAR(50) NOT NULL,
-    team_id INT REFERENCES Team(team_id),
-    start_year INT NOT NULL
+-- Penalty (Weak Entity)
+CREATE TABLE Penalty (
+    penalty_id SERIAL PRIMARY KEY,
+    race_id INT REFERENCES Race(race_id),
+    penalty_type VARCHAR(100) NOT NULL,
+    driver_id INT REFERENCES Driver(driver_id) ON DELETE CASCADE,
+    team_id INT REFERENCES Team(team_id) ON DELETE CASCADE
 );
 
 CREATE TABLE Circuit (
-    race_id SERIAL PRIMARY KEY,
+    circuit_id SERIAL PRIMARY KEY,
     grand_prix_name VARCHAR(100) NOT NULL,
     num_laps INT NOT NULL,
     circuit_name VARCHAR(100) NOT NULL,
@@ -47,15 +58,6 @@ CREATE TABLE Car (
     wins INT DEFAULT 0,
     poles INT DEFAULT 0,
     podiums INT DEFAULT 0
-);
-
--- Penalty (Weak Entity)
-CREATE TABLE Penalty (
-    penalty_id SERIAL PRIMARY KEY,
-    race_id INT REFERENCES Race(race_id),
-    penalty_type VARCHAR(100) NOT NULL,
-    driver_id INT REFERENCES Driver(driver_id) ON DELETE CASCADE,
-    team_id INT REFERENCES Team(team_id) ON DELETE CASCADE
 );
 
 -- Sponsor (Superclass)
@@ -90,15 +92,23 @@ CREATE TABLE Drives_For (
     PRIMARY KEY (driver_id, team_id)
 );
 
--- Relationship: Race Participation (to track drivers in each race)
-CREATE TABLE Race_Participation (
-    race_id INT REFERENCES Race(race_id) ON DELETE CASCADE,
+-- Relationship: Manufactures
+CREATE TABLE Manufactures (
+    team_id INT REFERENCES Team(team_id) ON DELETE CASCADE,
+    car1_id INT REFERENCES Car(car_id) ON DELETE CASCADE,
+    car2_id INT REFERENCES Car(car_id) ON DELETE CASCADE,
+    PRIMARY KEY (team_id, car1_id, car2_id)
+);
+
+-- Relationship: Race (to track drivers in each race)
+CREATE TABLE Race (
+    circuit_id INT REFERENCES Circuit(circuit),
     driver_id INT REFERENCES Driver(driver_id) ON DELETE CASCADE,
     team_id INT REFERENCES Team(team_id),
     car_id INT REFERENCES Car(car_id),
     grid_position INT,
     finishing_position INT,
-    PRIMARY KEY (race_id, driver_id),
+    PRIMARY KEY (circuit_id, driver_id, race_date),
     race_date DATE NOT NULL,
     pole_position_driver_id INT REFERENCES Driver(driver_id),
     fastest_lap_driver_id INT REFERENCES Driver(driver_id),
