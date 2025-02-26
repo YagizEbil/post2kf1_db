@@ -68,8 +68,17 @@ CREATE TABLE Car (
     season INT NOT NULL,
     wins INT DEFAULT 0,
     poles INT DEFAULT 0,
-    podiums INT DEFAULT 0,
-    FOREIGN KEY (team_id) REFERENCES Team(team_id) ON DELETE CASCADE
+    podiums INT DEFAULT 0
+);
+
+-- Relationship: Manifactures
+CREATE TABLE Manufactures (
+    team_id INT,
+    car1_id INT,
+    car2_id INT,
+    PRIMARY KEY (team_id, car_id, season),
+    FOREIGN KEY (team_id) REFERENCES Team(team_id) ON DELETE CASCADE,
+    FOREIGN KEY (car_id) REFERENCES Car(car_id) ON DELETE CASCADE
 );
 
 -- Circuit Table
