@@ -40,7 +40,7 @@ CREATE TABLE Team_Sponsor (
     FOREIGN KEY (sponsor_id) REFERENCES Sponsor(sponsor_id) ON DELETE CASCADE
 );
 
--- Driver_Sponsor Relationship Table (ISA)
+-- Driver_Sponsor Relationship Table (ISA) (merged)
 CREATE TABLE Driver_Sponsor (
     driver_id INT,
     sponsor_id INT,
@@ -49,11 +49,11 @@ CREATE TABLE Driver_Sponsor (
     FOREIGN KEY (sponsor_id) REFERENCES Sponsor(sponsor_id) ON DELETE CASCADE
 );
 
--- Principal and Managed by Table
+-- Principal and Managed by Table (merged)
 CREATE TABLE Principal_Managed (
     principal_id INT PRIMARY KEY,
     team_id INT NOT NULL,
-    FOREIGN KEY (team_id) REFERENCES Team(team_id) ON DELETE CASCADE
+    FOREIGN KEY (team_id) REFERENCES Team(team_id) ON DELETE CASCADE,
     principal_name VARCHAR(255) NOT NULL,
     date_of_birth DATE NOT NULL,
     nationality VARCHAR(100) NOT NULL,
@@ -114,7 +114,7 @@ CREATE TABLE Race (
     FOREIGN KEY (fastest_lap_driver_id) REFERENCES Driver(driver_id) ON DELETE SET NULL
 );
 
--- Penalty Table
+-- Penalty Table (merged)
 CREATE TABLE Penalty (
     penalty_id INT PRIMARY KEY,
     race_id INT NOT NULL,
