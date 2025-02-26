@@ -78,7 +78,8 @@ CREATE TABLE Manufactures (
     car2_id INT,
     PRIMARY KEY (team_id, car_id, season),
     FOREIGN KEY (team_id) REFERENCES Team(team_id) ON DELETE CASCADE,
-    FOREIGN KEY (car_id) REFERENCES Car(car_id) ON DELETE CASCADE
+    FOREIGN KEY (car1_id) REFERENCES Car(car_id) ON DELETE CASCADE,
+    FOREIGN KEY (car2_id) REFERENCES Car(car_id) ON DELETE CASCADE
 );
 
 -- Circuit Table
