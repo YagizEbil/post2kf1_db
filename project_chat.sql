@@ -122,17 +122,6 @@ CREATE TABLE Penalty (
     FOREIGN KEY (driver_id) REFERENCES Driver(driver_id) ON DELETE CASCADE,
 );
 
--- Race_Driver Relationship Table
-CREATE TABLE Race_Driver (
-    race_id INT,
-    driver_id INT,
-    grid_position INT NOT NULL,
-    finishing_position INT NOT NULL,
-    PRIMARY KEY (race_id, driver_id),
-    FOREIGN KEY (race_id) REFERENCES Race(race_id) ON DELETE CASCADE,
-    FOREIGN KEY (driver_id) REFERENCES Driver(driver_id) ON DELETE CASCADE
-);
-
 -- Driver_Penalty Relationship Table
 CREATE TABLE Driver_Penalty (
     driver_id INT,
