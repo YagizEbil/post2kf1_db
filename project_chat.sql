@@ -56,7 +56,8 @@ CREATE TABLE Principal_Managed (
     FOREIGN KEY (team_id) REFERENCES Team(team_id) ON DELETE CASCADE
     principal_name VARCHAR(255) NOT NULL,
     date_of_birth DATE NOT NULL,
-    nationality VARCHAR(100) NOT NULL
+    nationality VARCHAR(100) NOT NULL,
+    since DATE NOT NULL
 );
 
 -- Car Table
