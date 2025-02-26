@@ -76,7 +76,7 @@ CREATE TABLE Manufactures (
     team_id INT,
     car1_id INT,
     car2_id INT,
-    PRIMARY KEY (team_id, car_id, season),
+    PRIMARY KEY (team_id, season),
     FOREIGN KEY (team_id) REFERENCES Team(team_id) ON DELETE CASCADE,
     FOREIGN KEY (car1_id) REFERENCES Car(car_id) ON DELETE CASCADE,
     FOREIGN KEY (car2_id) REFERENCES Car(car_id) ON DELETE CASCADE
