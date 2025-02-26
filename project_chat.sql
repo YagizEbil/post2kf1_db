@@ -16,7 +16,8 @@ CREATE TABLE Team (
 CREATE TABLE Sponsor (
     sponsor_id INT PRIMARY KEY,
     sponsor_name VARCHAR(255) NOT NULL,
-    industry VARCHAR(100) NOT NULL
+    industry VARCHAR(100) NOT NULL,
+    contract_value DECIMAL(10,2) NOT NULL
 );
 
 -- Driver Table
