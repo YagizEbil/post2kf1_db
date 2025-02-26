@@ -126,7 +126,7 @@ CREATE TABLE Penalty (
 CREATE TABLE Drives_for (
     driver_id INT,
     team_id INT,
-    season INT,
+    drive_season INT,
     PRIMARY KEY (driver_id, team_id, season),
     FOREIGN KEY (driver_id) REFERENCES Driver(driver_id) ON DELETE CASCADE,
     FOREIGN KEY (team_id) REFERENCES Team(team_id) ON DELETE CASCADE
