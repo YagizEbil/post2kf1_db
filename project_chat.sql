@@ -4,19 +4,19 @@ USE F1_db;
 -- Team Table
 CREATE TABLE Team (
     team_id INT PRIMARY KEY,
-    team_name VARCHAR(255) NOT NULL,
+    team_name CHAR(255) NOT NULL,
     total_race_wins INT DEFAULT 0,
     num_constructor_championships INT DEFAULT 0,
     num_driver_championships INT DEFAULT 0,
     total_podiums INT DEFAULT 0,
-    country VARCHAR(100) NOT NULL
+    country CHAR(100) NOT NULL
 );
 
 -- Sponsor Table
 CREATE TABLE Sponsor (
     sponsor_id INT PRIMARY KEY,
-    sponsor_name VARCHAR(255) NOT NULL,
-    industry VARCHAR(100) NOT NULL,
+    sponsor_name CHAR(255) NOT NULL,
+    industry CHAR(100) NOT NULL,
     contract_value DECIMAL(10,2) NOT NULL
 );
 
@@ -31,7 +31,7 @@ CREATE TABLE Driver (
     num_poles INT DEFAULT 0
 );
 
--- Team_Sponsor Relationship Table
+-- Team_Sponsor Relationship Table (ISA (merged)
 CREATE TABLE Team_Sponsor (
     team_id INT,
     sponsor_id INT,
@@ -54,17 +54,17 @@ CREATE TABLE Principal_Managed (
     principal_id INT PRIMARY KEY,
     team_id INT NOT NULL,
     FOREIGN KEY (team_id) REFERENCES Team(team_id) ON DELETE CASCADE,
-    principal_name VARCHAR(255) NOT NULL,
+    principal_name CHAR(255) NOT NULL,
     date_of_birth DATE NOT NULL,
-    nationality VARCHAR(100) NOT NULL,
+    nationality CHAR(100) NOT NULL,
     since DATE NOT NULL
 );
 
 -- Car Table
 CREATE TABLE Car (
     car_id INT PRIMARY KEY,
-    car_name VARCHAR(255) NOT NULL,
-    engine_supplier VARCHAR(100) NOT NULL,
+    car_name CHAR(255) NOT NULL,
+    engine_supplier CHAR(100) NOT NULL,
     season INT NOT NULL,
     wins INT DEFAULT 0,
     poles INT DEFAULT 0,
@@ -74,21 +74,19 @@ CREATE TABLE Car (
 -- Relationship: Manifactures
 CREATE TABLE Manufactures (
     team_id INT,
-    car1_id INT,
-    car2_id INT,
-    PRIMARY KEY (team_id, season),
+    car_id INT,
+    PRIMARY KEY (team_id, car_id),
     FOREIGN KEY (team_id) REFERENCES Team(team_id) ON DELETE CASCADE,
-    FOREIGN KEY (car1_id) REFERENCES Car(car_id) ON DELETE CASCADE,
-    FOREIGN KEY (car2_id) REFERENCES Car(car_id) ON DELETE CASCADE
+    FOREIGN KEY (car_id) REFERENCES Car(car_id) ON DELETE CASCADE
 );
 
 -- Circuit Table
 CREATE TABLE Circuit (
     circuit_id INT PRIMARY KEY,
-    circuit_name VARCHAR(255) NOT NULL,
+    circuit_name CHAR(255) NOT NULL,
     num_laps INT NOT NULL,
-    country VARCHAR(100) NOT NULL,
-    grand_prix_name VARCHAR(255) NOT NULL
+    country CHAR(100) NOT NULL,
+    grand_prix_name CHAR(255) NOT NULL
 );
 
 -- Race Table
@@ -114,12 +112,12 @@ CREATE TABLE Race (
     FOREIGN KEY (fastest_lap_driver_id) REFERENCES Driver(driver_id) ON DELETE SET NULL
 );
 
--- Penalty Table (merged)
+-- Penalty Table (merged) (weak entity)
 CREATE TABLE Penalty (
     penalty_id INT PRIMARY KEY,
     race_id INT NOT NULL,
     driver_id INT NOT NULL,
-    penalty_type VARCHAR(255) NOT NULL,
+    penalty_type CHAR(255) NOT NULL,
     FOREIGN KEY (driver_id) REFERENCES Driver(driver_id) ON DELETE CASCADE,
 );
 
@@ -128,7 +126,7 @@ CREATE TABLE Drives_for (
     driver_id INT,
     team_id INT,
     drive_season INT,
-    PRIMARY KEY (driver_id, team_id, season),
+    PRIMARY KEY (driver_id, team_id, drive_season),
     FOREIGN KEY (driver_id) REFERENCES Driver(driver_id) ON DELETE CASCADE,
     FOREIGN KEY (team_id) REFERENCES Team(team_id) ON DELETE CASCADE
 );
