@@ -107,6 +107,18 @@ INSERT INTO Circuit VALUES (8, 'Nürburgring', 60, 'Germany', 'European Grand Pr
 INSERT INTO Circuit VALUES (9, 'Imola', 63, 'Italy', 'Emilia Romagna Grand Prix');
 INSERT INTO Circuit VALUES (10, 'Austin', 56, 'United States', 'United States Grand Prix');
 
+-- Insert into Race (10 rows)
+INSERT INTO Race VALUES (1, 1, 1, 3, 1, '2004-09-12', 1, 3, 3, 3, 1, 1);
+INSERT INTO Race VALUES (2, 2, 2, 1, 2, '1988-07-10', 2, 1, 1, 1, 1, 1);
+INSERT INTO Race VALUES (3, 3, 3, 4, 3, '2020-08-30', 3, 4, 4, 4, 1, 1);
+INSERT INTO Race VALUES (4, 4, 4, 8, 4, '2023-05-28', 4, 8, 8, 8, 1, 1);
+INSERT INTO Race VALUES (5, 5, 5, 5, 5, '1992-08-30', 5, 5, 5, 5, 1, 1);
+INSERT INTO Race VALUES (6, 6, 6, 9, 6, '1972-07-16', 6, 9, 9, 9, 1, 1);
+INSERT INTO Race VALUES (7, 7, 7, 7, 7, '2005-10-09', 7, 7, 7, 7, 1, 1);
+INSERT INTO Race VALUES (8, 8, 8, 7, 8, '2022-07-31', 8, 7, 7, 7, 1, 1);
+INSERT INTO Race VALUES (9, 9, 9, 9, 9, '1965-10-24', 9, 9, 9, 9, 1, 1);
+INSERT INTO Race VALUES (10, 10, 10, 10, 10, '1983-10-15', 10, 10, 10, 10, 1, 1);
+
 -- Insert Penalties (10 rows)
 INSERT INTO Penalty VALUES (1, 1, 1, 'Drive Through');
 INSERT INTO Penalty VALUES (2, 2, 2, '5-Second Time Penalty');
@@ -132,14 +144,3 @@ INSERT INTO Drives_for VALUES (8, 4, 2023);  -- Max Verstappen -> Red Bull (2023
 INSERT INTO Drives_for VALUES (9, 6, 1967);  -- Jim Clark -> Lotus (1967)
 INSERT INTO Drives_for VALUES (10, 10, 1954); -- Juan Manuel Fangio -> Brabham (1954)
 
--- Insert into Race (10 rows)
-INSERT INTO Race VALUES (1, 1, 1, 3, 1, '2004-09-12', 1, 3, 3, 3, 1, 1);
-INSERT INTO Race VALUES (2, 2, 2, 1, 2, '1988-07-10', 2, 1, 1, 1, 1, 1);
-INSERT INTO Race VALUES (3, 3, 3, 4, 3, '2020-08-30', 3, 4, 4, 4, 1, 1);
-INSERT INTO Race VALUES (4, 4, 4, 8, 4, '2023-05-28', 4, 8, 8, 8, 1, 1);
-INSERT INTO Race VALUES (5, 5, 5, 5, 5, '1992-08-30', 5, 5, 5, 5, 1, 1);
-INSERT INTO Race VALUES (6, 6, 6, 9, 6, '1972-07-16', 6, 9, 9, 9, 1, 1);
-INSERT INTO Race VALUES (7, 7, 7, 7, 7, '2005-10-09', 7, 7, 7, 7, 1, 1);
-INSERT INTO Race VALUES (8, 8, 8, 7, 8, '2022-07-31', 8, 7, 7, 7, 1, 1);
-INSERT INTO Race VALUES (9, 9, 9, 9, 9, '1965-10-24', 9, 9, 9, 9, 1, 1);
-INSERT INTO Race VALUES (10, 10, 10, 10, 10, '1983-10-15', 10, 10, 10, 10, 1, 1);
