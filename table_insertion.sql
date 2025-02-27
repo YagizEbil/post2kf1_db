@@ -133,30 +133,6 @@ INSERT INTO Drives_for VALUES (9, 6, 1967);  -- Jim Clark -> Lotus (1967)
 INSERT INTO Drives_for VALUES (10, 10, 1954); -- Juan Manuel Fangio -> Brabham (1954)
 
 -- Insert into Race (10 rows)
--- Race Table
--- CREATE TABLE Race (
---     race_id INT PRIMARY KEY,
---     circuit_id INT NOT NULL,
---     car_id INT NOT NULL,
---     driver_id INT NOT NULL,
---     team_id INT NOT NULL,
---     race_date DATE NOT NULL,
---     winning_team_id INT,
---     winning_driver_id INT,
---     pole_position_driver_id INT,
---     fastest_lap_driver_id INT,
---     grid_position INT NOT NULL,
---     finishing_position INT NOT NULL,
---     FOREIGN KEY (team_id) REFERENCES Team(team_id) ON DELETE CASCADE,
---     FOREIGN KEY (car_id) REFERENCES Car(car_id) ON DELETE CASCADE,
---     FOREIGN KEY (circuit_id) REFERENCES Circuit(circuit_id) ON DELETE CASCADE,
---     FOREIGN KEY (driver_id) REFERENCES Driver(driver_id) ON DELETE CASCADE,
---     FOREIGN KEY (winning_team_id) REFERENCES Team(team_id) ON DELETE SET NULL,
---     FOREIGN KEY (winning_driver_id) REFERENCES Driver(driver_id) ON DELETE SET NULL,
---     FOREIGN KEY (pole_position_driver_id) REFERENCES Driver(driver_id) ON DELETE SET NULL,
---     FOREIGN KEY (fastest_lap_driver_id) REFERENCES Driver(driver_id) ON DELETE SET NULL
--- );
-
 INSERT INTO Race VALUES (1, 1, 1, 3, 1, '2004-09-12', 1, 3, 3, 3, 1, 1);
 INSERT INTO Race VALUES (2, 2, 2, 1, 2, '1988-07-10', 2, 1, 1, 1, 1, 1);
 INSERT INTO Race VALUES (3, 3, 3, 4, 3, '2020-08-30', 3, 4, 4, 4, 1, 1);
