@@ -23,6 +23,7 @@ CREATE TABLE Sponsor (
 -- Driver Table
 CREATE TABLE Driver (
     driver_id INT PRIMARY KEY,
+    driver_name CHAR(255) NOT NULL,
     driver_number INT UNIQUE NOT NULL,
     date_of_birth DATE NOT NULL,
     num_wins INT DEFAULT 0,
@@ -71,7 +72,7 @@ CREATE TABLE Car (
     podiums INT DEFAULT 0
 );
 
--- Relationship: Manifactures
+-- Relationship: Manufactures
 CREATE TABLE Manufactures (
     team_id INT,
     car_id INT,
@@ -94,6 +95,7 @@ CREATE TABLE Race (
     race_id INT PRIMARY KEY,
     circuit_id INT NOT NULL,
     car_id INT NOT NULL,
+    driver_id INT NOT NULL,
     team_id INT NOT NULL,
     race_date DATE NOT NULL,
     winning_team_id INT,
@@ -102,10 +104,10 @@ CREATE TABLE Race (
     fastest_lap_driver_id INT,
     grid_position INT NOT NULL,
     finishing_position INT NOT NULL,
-    PRIMARY KEY (circuit_id, driver_id, race_date),
     FOREIGN KEY (team_id) REFERENCES Team(team_id) ON DELETE CASCADE,
     FOREIGN KEY (car_id) REFERENCES Car(car_id) ON DELETE CASCADE,
     FOREIGN KEY (circuit_id) REFERENCES Circuit(circuit_id) ON DELETE CASCADE,
+    FOREIGN KEY (driver_id) REFERENCES Driver(driver_id) ON DELETE CASCADE,
     FOREIGN KEY (winning_team_id) REFERENCES Team(team_id) ON DELETE SET NULL,
     FOREIGN KEY (winning_driver_id) REFERENCES Driver(driver_id) ON DELETE SET NULL,
     FOREIGN KEY (pole_position_driver_id) REFERENCES Driver(driver_id) ON DELETE SET NULL,
@@ -118,7 +120,8 @@ CREATE TABLE Penalty (
     race_id INT NOT NULL,
     driver_id INT NOT NULL,
     penalty_type CHAR(255) NOT NULL,
-    FOREIGN KEY (driver_id) REFERENCES Driver(driver_id) ON DELETE CASCADE,
+    FOREIGN KEY (race_id) REFERENCES Race(race_id) ON DELETE CASCADE,
+    FOREIGN KEY (driver_id) REFERENCES Driver(driver_id) ON DELETE CASCADE
 );
 
 -- Drives_for Relationship Table
