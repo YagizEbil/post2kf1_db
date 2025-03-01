@@ -115,17 +115,17 @@ INSERT INTO Race VALUES (4, 4, 4, 8, 4, '2023-05-28', 4, 8, 8, 8, 1, 1);
 INSERT INTO Race VALUES (5, 5, 5, 5, 5, '1992-08-30', 5, 5, 5, 5, 1, 1);
 INSERT INTO Race VALUES (6, 6, 6, 9, 6, '1972-07-16', 6, 9, 9, 9, 1, 1);
 INSERT INTO Race VALUES (7, 7, 7, 7, 7, '2005-10-09', 7, 7, 7, 7, 1, 1);
-INSERT INTO Race VALUES (8, 8, 8, 7, 8, '2022-07-31', 8, 7, 7, 7, 1, 1);
-INSERT INTO Race VALUES (9, 9, 9, 9, 9, '1965-10-24', 9, 9, 9, 9, 1, 1);
+INSERT INTO Race VALUES (8, 8, 8, 8, 4, '2022-07-31', 8, 7, 7, 7, 1, 1);
+INSERT INTO Race VALUES (9, 9, 9, 9, 6, '1965-10-24', 9, 9, 9, 9, 1, 1);
 INSERT INTO Race VALUES (10, 10, 10, 10, 10, '1983-10-15', 10, 10, 10, 10, 1, 1);
 
 -- Insert Penalties (10 rows)
-INSERT INTO Penalty VALUES (1, 1, 1, 'Drive Through');
-INSERT INTO Penalty VALUES (2, 2, 2, '5-Second Time Penalty');
-INSERT INTO Penalty VALUES (3, 3, 3, '10-Second Stop and Go');
-INSERT INTO Penalty VALUES (4, 4, 4, 'Grid Penalty');
+INSERT INTO Penalty VALUES (1, 1, 3, 'Drive Through');
+INSERT INTO Penalty VALUES (2, 2, 1, '5-Second Time Penalty');
+INSERT INTO Penalty VALUES (3, 3, 4, '10-Second Stop and Go');
+INSERT INTO Penalty VALUES (4, 4, 8, 'Grid Penalty');
 INSERT INTO Penalty VALUES (5, 5, 5, 'Disqualification');
-INSERT INTO Penalty VALUES (6, 6, 6, 'Track Limits Violation');
+INSERT INTO Penalty VALUES (6, 6, 9, 'Track Limits Violation');
 INSERT INTO Penalty VALUES (7, 7, 7, 'Causing a Collision');
 INSERT INTO Penalty VALUES (8, 8, 8, 'Unsafe Release');
 INSERT INTO Penalty VALUES (9, 9, 9, 'Jump Start');
