@@ -1,6 +1,7 @@
 -- Procedure 3: Get Team Standings by Wins
-CREATE PROCEDURE GetTeamStandings
-AS
+DELIMITER //
+
+CREATE PROCEDURE GetTeamStandings()
 BEGIN
     SELECT
         team_name,
@@ -10,4 +11,6 @@ BEGIN
     FROM Team
     ORDER BY total_race_wins DESC;
 END;
-GO
+//
+
+DELIMITER ;
