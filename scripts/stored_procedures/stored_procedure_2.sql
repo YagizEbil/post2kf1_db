@@ -8,7 +8,6 @@ BEGIN
         c.circuit_name,
         r.race_date,
         d.driver_name AS winning_driver,
-        r.finishing_position AS winning_driver_position
     FROM Race r
     JOIN Circuit c ON r.circuit_id = c.circuit_id
     JOIN Driver d ON r.winning_driver_id = d.driver_id
