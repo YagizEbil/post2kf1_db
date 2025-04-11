@@ -1,6 +1,7 @@
 -- Procedure 1: Get Driver's Career Summary
-CREATE PROCEDURE GetDriverCareerSummary (@driverId INT)
-AS
+DELIMITER //
+
+CREATE PROCEDURE GetDriverCareerSummary (IN driverId INT)
 BEGIN
     SELECT
         driver_name,
@@ -11,6 +12,8 @@ BEGIN
         num_championships,
         num_poles
     FROM Driver
-    WHERE driver_id = @driverId;
+    WHERE driver_id = driverId;
 END;
-GO
+//
+
+DELIMITER ;
