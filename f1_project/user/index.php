@@ -26,60 +26,59 @@
             max-width: 700px;
         }
         h1 {
-            color: #d90429; /* F1 Red */
-            margin-bottom: 20px; /* Increased margin */
-            border-bottom: 3px solid #000; /* Black accent */
-            padding-bottom: 15px; /* Increased padding */
-            font-size: 2.2em; /* Slightly larger title */
+            color: #d90429;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #000;
+            padding-bottom: 15px;
+            font-size: 2.2em;
         }
         h2 {
             color: #333;
-            margin-top: 35px; /* Increased margin */
-            margin-bottom: 18px; /* Increased margin */
-            font-size: 1.6em; /* Slightly larger section titles */
+            margin-top: 35px;
+            margin-bottom: 18px;
+            font-size: 1.6em;
             border-bottom: 1px solid #eee;
-            padding-bottom: 8px; /* Increased padding */
+            padding-bottom: 8px;
         }
         ul {
             list-style: none;
             padding: 0;
         }
         ul li {
-            margin-bottom: 14px; /* Increased margin */
+            margin-bottom: 14px;
         }
         ul li a {
             display: block;
-            background-color: #007bff; /* Blue for MySQL links */
+            background-color: #007bff;
             color: white;
-            padding: 14px 20px; /* Increased padding */
+            padding: 14px 20px;
             text-decoration: none;
-            border-radius: 6px; /* Slightly more rounded */
+            border-radius: 6px;
             transition: background-color 0.3s ease, transform 0.2s ease;
             font-size: 1.1em;
-            font-weight: 500; /* Slightly bolder text */
+            font-weight: 500;
         }
         ul li a:hover {
-            background-color: #0056b3; /* Darker blue */
-            transform: translateY(-2px); /* Slight lift effect */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Add shadow on hover */
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         .mysql-features a {
-            /* Default blue is fine, or specify if needed */
         }
         .mongodb-features a {
-            background-color: #28a745; /* Green for MongoDB/Support links */
+            background-color: #28a745;
         }
         .mongodb-features a:hover {
-            background-color: #218838; /* Darker green */
+            background-color: #218838;
         }
         .admin-link a {
-            background-color: #6c757d; /* Grey for Admin link */
+            background-color: #6c757d;
         }
         .admin-link a:hover {
-            background-color: #5a6268; /* Darker grey */
+            background-color: #5a6268;
         }
         footer {
-            margin-top: 40px; /* Increased margin */
+            margin-top: 40px;
             font-size: 0.9em;
             color: #777;
         }

@@ -1,6 +1,5 @@
 <?php
 
-// Function to generate a user-friendly ticket ID
 function generateUserFriendlyTicketID() {
     return "TICKET-" . date("Ymd-His") . "-" . substr(str_shuffle("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"), 0, 4);
 }
@@ -8,15 +7,12 @@ function generateUserFriendlyTicketID() {
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
-    $username = trim($_POST['username'] ?? ''); // ADDED: Get username
+    $username = trim($_POST['username'] ?? '');
     $subject = trim($_POST['subject'] ?? '');
     $description = trim($_POST['description'] ?? '');
     $priority = $_POST['priority'] ?? 'Low';
     $service_affected = $_POST['service_affected'] ?? 'General Inquiry';
-
-    // Basic validation
-    if (empty($username) || empty($subject) || empty($description)) { // ADDED: Username to validation
+    if (empty($username) || empty($subject) || empty($description)) {
         $message = "Error: Username, Subject, and Description are required.";
     } else {
         try {
@@ -25,14 +21,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $user_ticket_id = generateUserFriendlyTicketID();
             $newTicket = [
                 'ticket_id'       => $user_ticket_id,
-                'username'        => $username, // ADDED: username field
+                'username'        => $username,
                 'subject'         => $subject,
-                'description'     => $description, // This corresponds to "message" or "body" in some PDF contexts
+                'description'     => $description,
                 'priority'        => $priority,
                 'service_affected'=> $service_affected,
-                'status'          => 'Open', // We'll define "active" tickets as those not 'Closed'
-                'timestamp'       => new MongoDB\BSON\UTCDateTime(), // Creation time
-                'comments'        => [] // ADDED: Initialize an empty array for comments as per PDF (Section 3.4) [cite: 86]
+                'status'          => 'Open',
+                'timestamp'       => new MongoDB\BSON\UTCDateTime(),
+                'comments'        => []
             ];
 
             $databaseName = 'support_db';

@@ -3,15 +3,12 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Stored Procedure: GetTeamWonRaces
-
-// MySQL Connection Details
 $servername = "localhost";
 $username = "root";
-$password = ""; // Default XAMPP password
+$password = "";
 $dbname = "F1_db";
 
-$races_won = []; // To store results (array of rows)
+$races_won = [];
 $error_message = '';
 $submitted_team_id = '';
 
@@ -40,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($result) {
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
-                                $races_won[] = $row; // Add each row to the array
+                                $races_won[] = $row;
                             }
                         } else {
                             $error_message = "No races found for Team ID: " . htmlspecialchars($teamId) . ". This team might not have any recorded wins with the current data, or the Team ID might be incorrect.";

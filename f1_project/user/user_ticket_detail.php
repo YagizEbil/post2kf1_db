@@ -3,37 +3,32 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// User-Side Ticket Detail and Commenting
-
 $ticket_id_str = $_GET['id'] ?? null;
 $ticket = null;
-$message = ''; // For success/error messages from comment submission
-$error_message = ''; // For general page errors
+$message = ''; 
+$error_message = '';
 
 if (!$ticket_id_str) {
-    header("Location: user_ticket_list.php"); // Redirect if no ID is provided
+    header("Location: user_ticket_list.php");
     exit;
 }
 
-// MongoDB Connection
 $dbname_mongo = "support_db";
 $collectionName = "tickets";
-$manager = null; // Initialize manager
+$manager = null;
 
 try {
     $manager = new MongoDB\Driver\Manager("mongodb://localhost:27017");
     $object_id = new MongoDB\BSON\ObjectID($ticket_id_str);
 
-    // --- Handle "Add Comment" Form Submission ---
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['add_comment'])) {
-        $commenter_username = trim($_POST['commenter_username'] ?? 'Anonymous'); // As per PDF Figure 8
+        $commenter_username = trim($_POST['commenter_username'] ?? 'Anonymous');
         $comment_text = trim($_POST['comment_text'] ?? '');
 
         if (empty($commenter_username) || empty($comment_text)) {
             $error_message = "Username and comment text cannot be empty.";
         } else {
             $new_comment = [
-                // '_id' => new MongoDB\BSON\ObjectID(), // Optional: if you want unique IDs for comments themselves
                 'username' => $commenter_username,
                 'comment_text' => $comment_text,
                 'commented_at' => new MongoDB\BSON\UTCDateTime()
@@ -42,21 +37,19 @@ try {
             $bulk = new MongoDB\Driver\BulkWrite;
             $bulk->update(
                 ['_id' => $object_id],
-                ['$push' => ['comments' => $new_comment]], // Add the new comment to the 'comments' array
+                ['$push' => ['comments' => $new_comment]],
                 ['multi' => false, 'upsert' => false]
             );
             $result = $manager->executeBulkWrite("$dbname_mongo.$collectionName", $bulk);
 
             if ($result->getModifiedCount() == 1) {
                 $message = "Comment added successfully!";
-                // To show the new comment immediately, we will re-fetch the ticket below
             } else {
                 $error_message = "Could not add comment. Please try again.";
             }
         }
     }
 
-    // --- Fetch ticket details (always fetch to get latest, including new comments) ---
     $query = new MongoDB\Driver\Query(['_id' => $object_id]);
     $cursor = $manager->executeQuery("$dbname_mongo.$collectionName", $query);
     $ticket_array = $cursor->toArray();
@@ -84,12 +77,11 @@ try {
     $ticket = null;
 }
 
-// Function to format timestamp (copied from admin_view_tickets for consistency)
 function formatMongoTimestamp($mongoTimestamp, $timezone = 'Europe/Istanbul') {
     if (isset($mongoTimestamp) && $mongoTimestamp instanceof MongoDB\BSON\UTCDateTime) {
         $dateTime = $mongoTimestamp->toDateTime();
         try {
-            $dateTime->setTimezone(new DateTimeZone($timezone)); // Adjust to your timezone
+            $dateTime->setTimezone(new DateTimeZone($timezone));
             return htmlspecialchars($dateTime->format('Y-m-d H:i:s T'));
         } catch (Exception $e) {
             return 'Invalid Date';
@@ -117,7 +109,7 @@ function formatMongoTimestamp($mongoTimestamp, $timezone = 'Europe/Istanbul') {
         .ticket-details-grid dd { margin: 0; word-break: break-word; }
         .ticket-details-grid .description { grid-column: 1 / -1; }
         .ticket-details-grid .description dt { margin-bottom: 5px; }
-        .ticket-details-grid .description dd { white-space: pre-wrap; /* Preserve formatting of description */ }
+        .ticket-details-grid .description dd { white-space: pre-wrap; }
         
         .comments-section { margin-top: 30px; }
         .comment { background-color: #e9ecef; border: 1px solid #ddd; padding: 12px; margin-bottom: 10px; border-radius: 4px; }

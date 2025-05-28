@@ -1,62 +1,51 @@
 <?php
-// Stored Procedure: GetDriverCareerSummary
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "F1_db";
 
-// MySQL Connection Details
-$servername = "localhost"; // Default for XAMPP
-$username = "root";        // Default XAMPP username
-$password = "";            // Default XAMPP password (empty)
-$dbname = "F1_db";         // Your F1 database name
+$driver_summary = null;
+$error_message = '';
+$submitted_driver_id = '';
 
-$driver_summary = null; // To store results from the SP
-$error_message = '';    // To store any error messages
-$submitted_driver_id = ''; // To keep the submitted driver ID in the form
-
-// Check if the form has been submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['driver_id']) && !empty(trim($_POST['driver_id']))) {
         $submitted_driver_id = trim($_POST['driver_id']);
 
-        // Validate if driver_id is an integer
         if (filter_var($submitted_driver_id, FILTER_VALIDATE_INT) === false) {
             $error_message = "Error: Driver ID must be an integer.";
         } else {
             $driverId = (int)$submitted_driver_id;
 
-            // Create connection
             $conn = new mysqli($servername, $username, $password, $dbname);
 
-            // Check connection
             if ($conn->connect_error) {
                 $error_message = "Connection failed: " . $conn->connect_error;
             } else {
-                // Prepare the stored procedure call
-                // Using prepared statements is good practice to prevent SQL injection,
-                // even with stored procedures if inputs are involved in dynamic SQL within them (though less common for SP calls).
-                // For calling a simple SP like this, a direct query is often used.
-                $sql = "CALL GetDriverCareerSummary(?)"; // Using a placeholder for the driverId
+                $sql = "CALL GetDriverCareerSummary(?)";
 
                 $stmt = $conn->prepare($sql);
 
                 if ($stmt) {
-                    $stmt->bind_param("i", $driverId); // "i" signifies the type is integer
+                    $stmt->bind_param("i", $driverId);
                     $stmt->execute();
-                    $result = $stmt->get_result(); // Get the result set from the executed statement
+                    $result = $stmt->get_result();
 
                     if ($result) {
                         if ($result->num_rows > 0) {
-                            $driver_summary = $result->fetch_assoc(); // Fetch the single row of results
+                            $driver_summary = $result->fetch_assoc();
                         } else {
                             $error_message = "No career summary found for Driver ID: " . htmlspecialchars($driverId);
                         }
-                        $result->free(); // Free the result set
+                        $result->free();
                     } else {
                         $error_message = "Error executing stored procedure or getting results: " . $conn->error;
                     }
-                    $stmt->close(); // Close the statement
+                    $stmt->close();
                 } else {
                     $error_message = "Error preparing stored procedure call: " . $conn->error;
                 }
-                $conn->close(); // Close the connection
+                $conn->close();
             }
         }
     } else {
@@ -76,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         h2 { color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 10px; margin-bottom: 20px; }
         label { display: block; margin-top: 15px; margin-bottom: 5px; font-weight: bold; }
         input[type="text"], input[type="number"] {
-            width: calc(100% - 22px); /* Account for padding and border */
+            width: calc(100% - 22px);
             padding: 10px;
             margin-bottom: 20px;
             border: 1px solid #ccc;

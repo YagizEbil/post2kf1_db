@@ -3,12 +3,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Trigger Demonstration: UpdateDriverStats
-
-// MySQL Connection Details
 $servername = "localhost";
 $username = "root";
-$password = ""; // Default XAMPP password
+$password = "";
 $dbname = "F1_db";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -16,7 +13,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// --- Helper function to get driver stats ---
 function getDriverStats($conn_obj, $driverId) {
     $stmt = $conn_obj->prepare("SELECT driver_name, num_wins, num_podiums, num_poles FROM Driver WHERE driver_id = ?");
     if (!$stmt) {
@@ -28,20 +24,18 @@ function getDriverStats($conn_obj, $driverId) {
     if ($result->num_rows > 0) {
         $stats = $result->fetch_assoc();
     } else {
-        $stats = null; // Driver not found
+        $stats = null;
     }
     $stmt->close();
     return $stats;
 }
 
-// --- Variables for the page ---
 $message = '';
 $error_message_page = '';
-$driver_id_to_watch = 1; // Default Driver ID to watch (e.g., Ayrton Senna from your sample data)
+$driver_id_to_watch = 1;
 $driver_stats_before = null;
 $driver_stats_after = null;
 
-// Fetch initial "before" stats for the driver to watch
 $driver_stats_before = getDriverStats($conn, $driver_id_to_watch);
 if (is_string($driver_stats_before)) {
     $error_message_page = $driver_stats_before;
@@ -50,39 +44,26 @@ if (is_string($driver_stats_before)) {
     $error_message_page = "Driver ID " . htmlspecialchars($driver_id_to_watch) . " not found for 'before' stats.";
 }
 
-// --- Handle Form Submission to Insert a New Race ---
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Sanitize and retrieve form inputs
     $race_id = filter_input(INPUT_POST, 'race_id', FILTER_VALIDATE_INT);
     $circuit_id = filter_input(INPUT_POST, 'circuit_id', FILTER_VALIDATE_INT);
     $car_id = filter_input(INPUT_POST, 'car_id', FILTER_VALIDATE_INT);
-    $team_id = filter_input(INPUT_POST, 'team_id', FILTER_VALIDATE_INT); // Team driver raced for
+    $team_id = filter_input(INPUT_POST, 'team_id', FILTER_VALIDATE_INT);
     
-    // driver_id_for_race is the driver participating in the race, for podium check
     $driver_id_for_race = filter_input(INPUT_POST, 'driver_id_for_race', FILTER_VALIDATE_INT);
     $race_date = $_POST['race_date'] ?? date('Y-m-d');
     
-    // winning_driver_id_for_race is the driver who won, for win count check
     $winning_driver_id_for_race = filter_input(INPUT_POST, 'winning_driver_id_for_race', FILTER_VALIDATE_INT, ['options' => ['default' => null, 'null_on_failure' => true]]);
-    // pole_position_driver_id_for_race is for pole count check
     $pole_position_driver_id_for_race = filter_input(INPUT_POST, 'pole_position_driver_id_for_race', FILTER_VALIDATE_INT, ['options' => ['default' => null, 'null_on_failure' => true]]);
-    // finishing_position is for the driver_id_for_race, for podium check
     $finishing_position = filter_input(INPUT_POST, 'finishing_position', FILTER_VALIDATE_INT);
     
     $grid_position = filter_input(INPUT_POST, 'grid_position', FILTER_VALIDATE_INT, ['options' => ['default' => 1]]);
-    // Other FKs like winning_team_id can be NULL or need inputs
     $winning_team_id = filter_input(INPUT_POST, 'winning_team_id', FILTER_VALIDATE_INT, ['options' => ['default' => null, 'null_on_failure' => true]]);
     $fastest_lap_driver_id = null;
 
-    // --- Update $driver_id_to_watch based on which driver stats we want to see change ---
-    // Let's prioritize showing changes for the driver_id_for_race (for podium),
-    // or winning_driver_id_for_race, or pole_position_driver_id_for_race.
-    // For simplicity in demonstration, the form defaults these to driver_id_to_watch.
-    if ($driver_id_for_race) { // The main driver ID from the form
+    if ($driver_id_for_race) {
         $driver_id_to_watch = $driver_id_for_race;
     }
-    // Re-fetch "before" stats for the potentially new driver_id_to_watch if form was submitted
-    // This ensures the "before" stats are relevant to the driver most likely affected by the form inputs.
     $driver_stats_before = getDriverStats($conn, $driver_id_to_watch);
      if (is_string($driver_stats_before)) {
         $message = $driver_stats_before;
@@ -91,7 +72,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "Warning: Driver ID " . htmlspecialchars($driver_id_to_watch) . " (selected for watching) not found.";
     }
 
-    // --- Basic Validation ---
     if ($race_id === false || $circuit_id === false || $car_id === false || $team_id === false ||
         $driver_id_for_race === false || $finishing_position === false || $grid_position === false ) {
         $message = "Error: Race ID, Circuit ID, Car ID, Team ID, participating Driver ID, Finishing Position, and Grid Position must be valid integers.";
@@ -101,13 +81,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (!$stmt_insert_race) {
             $message = "Error preparing race insert query: " . $conn->error;
         } else {
-            // Bind parameters
-            // Note: winning_team_id is now correctly typed if not null
-            $winning_team_id_val = $winning_team_id_for_race ? $winning_team_id : null; // Ensure it's the team of the winning driver or null. (This logic might need refinement based on how winning_team_id is determined by the form. For now, assume it's set if winning_driver is set)
+            $winning_team_id_val = $winning_team_id_for_race ? $winning_team_id : null;
 
             $stmt_insert_race->bind_param("iiiiisisiiii",
                 $race_id, $circuit_id, $car_id, $driver_id_for_race, $team_id, $race_date,
-                $winning_team_id, // This should be the ID of the team that won the race
+                $winning_team_id,
                 $winning_driver_id_for_race, 
                 $pole_position_driver_id_for_race,
                 $fastest_lap_driver_id, 

@@ -3,12 +3,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Trigger Demonstration: UpdateCarStats
-
-// MySQL Connection Details
 $servername = "localhost";
 $username = "root";
-$password = ""; // Default XAMPP password
+$password = "";
 $dbname = "F1_db";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -16,7 +13,6 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// --- Helper function to get car stats ---
 function getCarStats($conn_obj, $carId) {
     $stmt = $conn_obj->prepare("SELECT car_name, wins, podiums, poles FROM Car WHERE car_id = ?");
     if (!$stmt) {
@@ -28,20 +24,18 @@ function getCarStats($conn_obj, $carId) {
     if ($result->num_rows > 0) {
         $stats = $result->fetch_assoc();
     } else {
-        $stats = null; // Car not found
+        $stats = null;
     }
     $stmt->close();
     return $stats;
 }
 
-// --- Variables for the page ---
 $message = '';
 $error_message_page = '';
-$car_id_to_watch = 1; // Default Car ID to watch (e.g., F2004 from your sample data)
+$car_id_to_watch = 1;
 $car_stats_before = null;
 $car_stats_after = null;
 
-// Fetch initial "before" stats for the car to watch
 $car_stats_before = getCarStats($conn, $car_id_to_watch);
 if (is_string($car_stats_before)) {
     $error_message_page = $car_stats_before;
@@ -50,16 +44,13 @@ if (is_string($car_stats_before)) {
     $error_message_page = "Car ID " . htmlspecialchars($car_id_to_watch) . " not found for 'before' stats.";
 }
 
-// --- Handle Form Submission to Insert a New Race ---
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Sanitize and retrieve form inputs
     $race_id = filter_input(INPUT_POST, 'race_id', FILTER_VALIDATE_INT);
-    // This car_id_for_race is THE car used in this race entry and whose stats will be updated by the trigger.
     $car_id_for_race = filter_input(INPUT_POST, 'car_id_for_race', FILTER_VALIDATE_INT);
     
     $circuit_id = filter_input(INPUT_POST, 'circuit_id', FILTER_VALIDATE_INT);
-    $driver_id = filter_input(INPUT_POST, 'driver_id', FILTER_VALIDATE_INT); // Driver of this car_id_for_race
-    $team_id = filter_input(INPUT_POST, 'team_id', FILTER_VALIDATE_INT);   // Team of this car_id_for_race
+    $driver_id = filter_input(INPUT_POST, 'driver_id', FILTER_VALIDATE_INT);
+    $team_id = filter_input(INPUT_POST, 'team_id', FILTER_VALIDATE_INT);
     $race_date = $_POST['race_date'] ?? date('Y-m-d');
     
     $winning_driver_id = filter_input(INPUT_POST, 'winning_driver_id', FILTER_VALIDATE_INT, ['options' => ['default' => null, 'null_on_failure' => true]]);
@@ -68,13 +59,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     $grid_position = filter_input(INPUT_POST, 'grid_position', FILTER_VALIDATE_INT, ['options' => ['default' => 1]]);
     $winning_team_id = filter_input(INPUT_POST, 'winning_team_id', FILTER_VALIDATE_INT, ['options' => ['default' => null, 'null_on_failure' => true]]);
-    $fastest_lap_driver_id = null; // Example default, can be NULL
+    $fastest_lap_driver_id = null;
 
-    // --- Update $car_id_to_watch to the car_id submitted in the form ---
     if ($car_id_for_race) {
         $car_id_to_watch = $car_id_for_race;
     }
-    // Re-fetch "before" stats for this specific car_id just before insert
     $car_stats_before = getCarStats($conn, $car_id_to_watch);
      if (is_string($car_stats_before)) {
         $message = $car_stats_before;
@@ -84,12 +73,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
 
-    // --- Basic Validation ---
     if ($race_id === false || $car_id_for_race === false || $circuit_id === false || $driver_id === false ||
         $team_id === false || $finishing_position === false || $grid_position === false) {
         $message = "Error: Race ID, Car ID for Race, Circuit ID, Driver ID, Team ID, Finishing Position, and Grid Position must be valid integers.";
     } else {
-        // Prepare INSERT statement for Race table
         $stmt_insert_race = $conn->prepare("INSERT INTO Race (race_id, circuit_id, car_id, driver_id, team_id, race_date, winning_team_id, winning_driver_id, pole_position_driver_id, fastest_lap_driver_id, grid_position, finishing_position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         
         if (!$stmt_insert_race) {
@@ -103,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($stmt_insert_race->execute()) {
                 $message = "New race record (ID: " . htmlspecialchars($race_id) . ") inserted successfully! Trigger 'UpdateCarStats' should have fired for Car ID " . htmlspecialchars($car_id_for_race) . ".";
-                $car_stats_after = getCarStats($conn, $car_id_to_watch); // Re-fetch stats for the car from the form
+                $car_stats_after = getCarStats($conn, $car_id_to_watch);
                 if (is_string($car_stats_after)) {
                      $message .= "<br>Error fetching 'after' stats: " . $car_stats_after;
                      $car_stats_after = null;

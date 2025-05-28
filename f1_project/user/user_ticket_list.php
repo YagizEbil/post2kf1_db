@@ -3,13 +3,10 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// User-Side Ticket List
-
-// MongoDB Connection Details
-$servername = "localhost"; // Not used for MongoDB, but good to have if mixing
-$username_db = "root";     // Not used for MongoDB
-$password_db = "";         // Not used for MongoDB
-$dbname_mongo = "support_db"; // Your MongoDB database name
+$servername = "localhost";
+$username_db = "root";
+$password_db = "";
+$dbname_mongo = "support_db";
 $collectionName = "tickets";
 
 $distinct_usernames = [];
@@ -20,27 +17,22 @@ $error_message = '';
 try {
     $manager = new MongoDB\Driver\Manager("mongodb://localhost:27017");
 
-    // 1. Fetch distinct usernames that have active tickets
-    // "Active" tickets are those not 'Closed'.
-    // Your PDF suggests boolean status (true=active), Figure 10. We are using strings for now.
-    // If you switch to boolean status: {'status': true}
     $distinct_command = new MongoDB\Driver\Command([
         'distinct' => $collectionName,
         'key' => 'username',
-        'query' => ['status' => ['$ne' => 'Closed']] // Find usernames with tickets not 'Closed'
+        'query' => ['status' => ['$ne' => 'Closed']]
     ]);
     $cursor_usernames = $manager->executeCommand($dbname_mongo, $distinct_command);
     $distinct_usernames_result = $cursor_usernames->toArray();
     if (count($distinct_usernames_result) > 0 && isset($distinct_usernames_result[0]->values)) {
         $distinct_usernames = $distinct_usernames_result[0]->values;
-        sort($distinct_usernames); // Sort usernames alphabetically
+        sort($distinct_usernames);
     }
 
-    // 2. If a username is selected, fetch their active tickets
     if ($selected_username) {
         $query_tickets = new MongoDB\Driver\Query(
             ['username' => $selected_username, 'status' => ['$ne' => 'Closed']],
-            ['sort' => ['timestamp' => -1]] // Sort user's tickets by newest first
+            ['sort' => ['timestamp' => -1]]
         );
         $cursor_tickets = $manager->executeQuery("$dbname_mongo.$collectionName", $query_tickets);
         $user_tickets = $cursor_tickets->toArray();
@@ -138,7 +130,7 @@ try {
                                 if (isset($ticket->timestamp) && $ticket->timestamp instanceof MongoDB\BSON\UTCDateTime) {
                                     $dateTime = $ticket->timestamp->toDateTime();
                                     try {
-                                        $dateTime->setTimezone(new DateTimeZone('Europe/Istanbul')); // Adjust to your timezone
+                                        $dateTime->setTimezone(new DateTimeZone('Europe/Istanbul'));
                                         echo htmlspecialchars($dateTime->format('Y-m-d H:i:s'));
                                     } catch (Exception $e) { echo 'Invalid Date';}
                                 } else { echo 'N/A'; }

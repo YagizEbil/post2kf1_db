@@ -3,48 +3,35 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Stored Procedure: GetTeamStandings
-
-// MySQL Connection Details
 $servername = "localhost";
 $username = "root";
-$password = ""; // Default XAMPP password
+$password = "";
 $dbname = "F1_db";
 
-$team_standings = []; // To store results (array of rows)
+$team_standings = [];
 $error_message = '';
 
-// --- Sorting Logic ---
-// Define allowed columns for sorting to prevent arbitrary input
 $allowed_sort_columns = [
     'team_name' => 'Team Name',
     'total_race_wins' => 'Total Race Wins',
     'num_constructor_championships' => 'Constructor Championships',
     'num_driver_championships' => 'Driver Championships'
 ];
-
-// Default sort: The SP sorts by total_race_wins DESC by default.
-// We'll use these as PHP defaults if no GET params are set,
-// or to track the current sorting state for link generation.
 $sort_column = $_GET['sort'] ?? 'total_race_wins';
 $sort_order = $_GET['order'] ?? 'desc';
 
-// Validate sort column and order
 if (!array_key_exists($sort_column, $allowed_sort_columns)) {
-    $sort_column = 'total_race_wins'; // Default to a safe value
+    $sort_column = 'total_race_wins';
 }
 if (!in_array(strtolower($sort_order), ['asc', 'desc'])) {
-    $sort_order = 'desc'; // Default to a safe value
+    $sort_order = 'desc';
 }
-// --- End Sorting Logic ---
-
-// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
     $error_message = "Connection failed: " . $conn->connect_error;
 } else {
-    $sql = "CALL GetTeamStandings()"; // This SP sorts by total_race_wins DESC by default
+    $sql = "CALL GetTeamStandings()";
     $result = $conn->query($sql);
 
     if ($result) {
@@ -56,7 +43,6 @@ if ($conn->connect_error) {
             $error_message = "No team standings found.";
         }
         
-        // Free multiple result sets
         while ($conn->more_results() && $conn->next_result()) {
             if ($res = $conn->store_result()) {
                 $res->free();
@@ -65,21 +51,15 @@ if ($conn->connect_error) {
         if ($result instanceof mysqli_result) {
              $result->free();
         }
-
-        // --- Apply PHP Sorting if requested and different from SP's default for 'total_race_wins' ---
-        // The SP already sorts by 'total_race_wins' DESC.
-        // We only need to re-sort if the user chose a different column,
-        // or a different order for 'total_race_wins'.
-        if (!empty($team_standings) && (isset($_GET['sort']))) { // Only sort if sort param is explicitly set
+        if (!empty($team_standings) && (isset($_GET['sort']))) {
             usort($team_standings, function($a, $b) use ($sort_column, $sort_order) {
                 $val_a = $a[$sort_column];
                 $val_b = $b[$sort_column];
 
-                // Handle numeric vs string comparison
                 if (is_numeric($val_a) && is_numeric($val_b)) {
-                    $comparison = $val_a <=> $val_b; // Spaceship operator for numeric comparison
+                    $comparison = $val_a <=> $val_b;
                 } else {
-                    $comparison = strcasecmp((string)$val_a, (string)$val_b); // Case-insensitive string comparison
+                    $comparison = strcasecmp((string)$val_a, (string)$val_b);
                 }
                 
                 return ($sort_order == 'desc') ? -$comparison : $comparison;
@@ -92,16 +72,15 @@ if ($conn->connect_error) {
     $conn->close();
 }
 
-// Helper function to generate sorting links for table headers
 function get_sort_link($column_key, $column_display_name, $current_sort_column, $current_sort_order, $allowed_columns) {
     if (!array_key_exists($column_key, $allowed_columns)) {
-        return $column_display_name; // Not a sortable column
+        return $column_display_name;
     }
     $order_for_link = 'desc';
     $arrow = '';
     if ($current_sort_column == $column_key) {
         $order_for_link = ($current_sort_order == 'asc') ? 'desc' : 'asc';
-        $arrow = ($current_sort_order == 'asc') ? ' &uarr;' : ' &darr;'; // Up or Down arrow
+        $arrow = ($current_sort_order == 'asc') ? ' &uarr;' : ' &darr;';
     }
     return '<a href="?sort=' . $column_key . '&order=' . $order_for_link . '">' . $column_display_name . $arrow . '</a>';
 }
