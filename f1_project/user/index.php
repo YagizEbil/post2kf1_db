@@ -104,7 +104,7 @@
         <ul class="mongodb-features">
             <li><a href="submit_ticket_form.php">Submit a New Support Ticket</a></li>
             <li><a href="user_ticket_list.php">View My Support Tickets</a></li> 
-            <li class="admin-link" style="margin-top: 20px;"><a href="../admin/admin_view_tickets.php">Admin: View/Manage Tickets</a></li> 
+            <li class="admin-link" style="margin-top: 20px;"><a href="../admin/index.php">Admin: View/Manage Tickets</a></li> 
         </ul>
 
         <footer>
