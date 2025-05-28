@@ -5,7 +5,7 @@ $ticket_id_str = $_GET['id'] ?? null;
 
 if (!$ticket_id_str) {
     $_SESSION['error_message'] = "No Ticket ID provided for deletion.";
-    header("Location: admin_view_tickets.php");
+    header("Location: index.php");
     exit;
 }
 
@@ -36,6 +36,6 @@ try {
 } catch (Throwable $t) {
     $_SESSION['error_message'] = "A general error occurred during deletion: " . $t->getMessage();
 }
-header("Location: admin_view_tickets.php");
+header("Location: index.php");
 exit;
 ?>
