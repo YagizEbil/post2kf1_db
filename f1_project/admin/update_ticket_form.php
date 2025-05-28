@@ -10,7 +10,7 @@ $error_message = '';
 $possible_statuses = ['Open', 'In Progress', 'Pending User Response', 'Closed'];
 
 if (!$ticket_id_str) {
-    header("Location: admin_view_tickets.php");
+    header("Location: index.php");
     exit;
 }
 
@@ -236,7 +236,7 @@ function formatMongoTimestamp($mongoTimestamp, $timezone = 'Europe/Istanbul') {
         <?php endif; ?>
 
         <div class="action-links">
-            <a href="admin_view_tickets.php">Back to Admin Ticket List</a>
+            <a href="index.php">Back to Admin Ticket List</a>
             <a href="../user/index.php" style="margin-left: auto;">Back to Main Page</a>
         </div>
     </div>
