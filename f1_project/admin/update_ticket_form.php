@@ -3,12 +3,10 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-// Admin Update Ticket Status & Add Comment
-
 $ticket_id_str = $_GET['id'] ?? null;
 $ticket = null;
-$message = ''; // For success messages
-$error_message = ''; // For error messages
+$message = '';
+$error_message = '';
 $possible_statuses = ['Open', 'In Progress', 'Pending User Response', 'Closed'];
 
 if (!$ticket_id_str) {
@@ -16,7 +14,6 @@ if (!$ticket_id_str) {
     exit;
 }
 
-// MongoDB Connection
 $dbname_mongo = "support_db";
 $collectionName = "tickets";
 $manager = null;
@@ -25,7 +22,7 @@ try {
     $manager = new MongoDB\Driver\Manager("mongodb://localhost:27017");
     $object_id = new MongoDB\BSON\ObjectID($ticket_id_str);
 
-    // --- Handle ADMIN "Add Comment" Form Submission ---
+
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['admin_add_comment'])) {
         $admin_comment_text = trim($_POST['admin_comment_text'] ?? '');
 
@@ -33,7 +30,7 @@ try {
             $error_message = "Admin comment text cannot be empty.";
         } else {
             $new_admin_comment = [
-                'username' => 'admin', // Admin's username is fixed
+                'username' => 'admin',
                 'comment_text' => $admin_comment_text,
                 'commented_at' => new MongoDB\BSON\UTCDateTime()
             ];
@@ -53,8 +50,7 @@ try {
             }
         }
     }
-    // --- Handle "Update Status" Form Submission ---
-    elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_status'])) { // Check for 'update_status' submit
+    elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_status'])) { 
         $new_status = $_POST['status'] ?? null;
 
         if ($new_status && in_array($new_status, $possible_statuses)) {
@@ -80,7 +76,6 @@ try {
         }
     }
 
-    // --- Fetch ticket details (always fetch to get latest state) ---
     $query = new MongoDB\Driver\Query(['_id' => $object_id]);
     $cursor = $manager->executeQuery("$dbname_mongo.$collectionName", $query);
     $ticket_array = $cursor->toArray();

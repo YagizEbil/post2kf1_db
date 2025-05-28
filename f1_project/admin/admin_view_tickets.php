@@ -1,7 +1,5 @@
 <?php
-session_start(); // Start session for flash messages
-
-// Admin View Tickets
+session_start(); 
 $tickets = [];
 $error_message = '';
 
@@ -9,7 +7,7 @@ try {
     $manager = new MongoDB\Driver\Manager("mongodb://localhost:27017");
     $databaseName = 'support_db';
     $collectionName = 'tickets';
-    $query = new MongoDB\Driver\Query([], ['sort' => ['timestamp' => -1]]); // Sort by newest first
+    $query = new MongoDB\Driver\Query([], ['sort' => ['timestamp' => -1]]);
     $cursor = $manager->executeQuery("$databaseName.$collectionName", $query);
     $tickets = $cursor->toArray();
 } catch (MongoDB\Driver\Exception\ConnectionTimeoutException $e) {
@@ -42,28 +40,28 @@ try {
         .actions a {
             margin-right: 5px;
             display: inline-block;
-            padding: 6px 12px; /* Adjusted padding */
+            padding: 6px 12px; 
             color: white;
-            border-radius: 4px; /* Slightly more rounded */
+            border-radius: 4px;
             font-size: 0.9em;
             text-align: center;
-            min-width: 60px; /* Ensure buttons have some minimum width */
+            min-width: 60px;
         }
-        .actions a.update-btn { background-color: #28a745; /* Green for update */ }
+        .actions a.update-btn { background-color: #28a745; }
         .actions a.update-btn:hover { background-color: #218838; }
-        .actions a.delete-btn { background-color: #dc3545; /* Red for delete */ }
+        .actions a.delete-btn { background-color: #dc3545;}
         .actions a.delete-btn:hover { background-color: #c82333; }
-        /* Flash messages styling */
+        
         .message { padding: 10px; margin-bottom: 15px; border-radius: 4px; text-align: center; }
         .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        /* .error class already defined, but ensure it's suitable for flash messages too */
+        
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Support Ticket Admin View</h2>
 
-        <?php // Display Flash Messages
+        <?php 
         if (isset($_SESSION['success_message'])) {
             echo '<p class="message success">' . htmlspecialchars($_SESSION['success_message']) . '</p>';
             unset($_SESSION['success_message']);
@@ -74,7 +72,7 @@ try {
         }
         ?>
 
-        <?php if (!empty($error_message) && empty($tickets) ): // Show general connection error only if no tickets due to it ?>
+        <?php if (!empty($error_message) && empty($tickets) ): ?>
             <p class="error"><?php echo htmlspecialchars($error_message); ?></p>
         <?php endif; ?>
 
@@ -120,7 +118,7 @@ try {
                     <?php endforeach; ?>
                 </tbody>
             </table>
-        <?php elseif (empty($error_message)): // Only show "no tickets" if there wasn't a connection error ?>
+        <?php elseif (empty($error_message)):
             <p class="no-tickets">No support tickets found.</p>
         <?php endif; ?>
         <p style="margin-top: 20px;"><a href="../user/submit_ticket_form.php">Submit a New Ticket</a></p>

@@ -1,11 +1,10 @@
 <?php
-session_start(); // Optional: for flash messages if you implement them
+session_start(); 
 
 $ticket_id_str = $_GET['id'] ?? null;
 
 if (!$ticket_id_str) {
-    // If no ID is provided, redirect back.
-    $_SESSION['error_message'] = "No Ticket ID provided for deletion."; // Optional flash message
+    $_SESSION['error_message'] = "No Ticket ID provided for deletion.";
     header("Location: admin_view_tickets.php");
     exit;
 }
@@ -15,18 +14,17 @@ try {
     $databaseName = 'support_db';
     $collectionName = 'tickets';
 
-    // Convert string ID to MongoDB\BSON\ObjectID
     $object_id = new MongoDB\BSON\ObjectID($ticket_id_str);
 
     $bulk = new MongoDB\Driver\BulkWrite;
-    $bulk->delete(['_id' => $object_id], ['limit' => 1]); // Ensure only one document is deleted
+    $bulk->delete(['_id' => $object_id], ['limit' => 1]); 
 
     $result = $manager->executeBulkWrite("$databaseName.$collectionName", $bulk);
 
     if ($result->getDeletedCount() == 1) {
-        $_SESSION['success_message'] = "Ticket deleted successfully!"; // Optional flash message
+        $_SESSION['success_message'] = "Ticket deleted successfully!";
     } else {
-        $_SESSION['error_message'] = "Could not delete ticket or ticket not found."; // Optional flash message
+        $_SESSION['error_message'] = "Could not delete ticket or ticket not found."; 
     }
 
 } catch (MongoDB\Driver\Exception\InvalidArgumentException $e) {
@@ -38,8 +36,6 @@ try {
 } catch (Throwable $t) {
     $_SESSION['error_message'] = "A general error occurred during deletion: " . $t->getMessage();
 }
-
-// Redirect back to the admin ticket list
 header("Location: admin_view_tickets.php");
 exit;
 ?>
